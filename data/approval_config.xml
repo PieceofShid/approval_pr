@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ics_approval_pr_config_01" model="ics.approval.pr.config">
+            <field name="name">Approval Purchase Request</field>
+        </record>
+    </data>
+</odoo>

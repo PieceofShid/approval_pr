@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_purchases_request">
+        <t t-call="web.html_container">    
+            <t t-foreach="docs" t-as="doc">
+                
+                <div t-attf-class="header">
+                    <t t-if="doc.picking_type_id.warehouse_id.code == 'WHTBN'">
+                        <img src="/ics_report_template/static/img/header_factory_tuban.png" style="position:absolute; left:0; top:0; width: 100%;"/>
+                    </t>
+                    <t t-elif="doc.picking_type_id.warehouse_id.code == 'WHRBG'">
+                        <img src="/ics_report_template/static/img/header_factory_rembang.png" style="position:absolute; left:0; top:0; width: 100%;"/>
+                    </t>
+                    <t t-elif="doc.picking_type_id.warehouse_id.code == 'WHMDR'">
+                        <img src="/ics_report_template/static/img/header_factory_madura.png" style="position:absolute; left:0; top:0; width: 100%;"/>
+                    </t>
+                    <t t-else="">
+                        <img src="/ics_report_template/static/img/header_tanpa_factory.png" style="position:absolute; left:0; top:0; width: 100%;"/>
+                    </t>
+                </div>
+                
+                <div t-attf-class="article o_report_layout_standard o_table_standard">
+                    
+                    <link href="https://fonts.cdnfonts.com/css/book-antiqua" rel="stylesheet"/>
+                    <link href="https://fonts.cdnfonts.com/css/helvetica-2" rel="stylesheet"/>
+        
+                    <style>
+                        table.table-bordered &gt; thead &gt; tr{
+                            background: #2b3991 !important;
+                        }
+                        table.table-bordered &gt; thead &gt; tr &gt; th{
+                            color: #fff !important;
+                            font-size: 12pt;
+                        }
+                        table.table-bordered &gt; tbody &gt; tr &gt; td{
+                            font-size: 10pt;
+                        }
+                        .tfoot{
+                            background: #2b3991 !important;
+                        }
+                        .tfoot &gt; th{
+                            color: #fff !important;
+                            font-size: 12pt;
+                        }
+                        .brand{
+                            background: #d6d6d6 !important;
+                        }
+                        .bot-sect{
+                            page-break-inside: avoid !important;
+                        }
+                        .information{
+                            max-width: 60%;
+                        }
+                        .signature{
+                            max-width: 100%;
+                        }
+                    </style>
+                    
+                    <div class="page" style="font-family: 'Helvetica', sans-serif; font-size: 11pt">
+    
+                        <p class="text-center fw-bold" style="font-size: 24pt; letter-spacing: 2; color: #000; font-family: 'Book Antiqua';">PURCHASE REQUEST</p>
+                        
+                        <!--<div class="row">-->
+                        <!--    <div class="col">-->
+                                
+                        <!--    </div>-->
+                        <!--    <div class="col">-->
+                        <!--        <table class="table-borderless w-100">-->
+                        <!--            <tr>-->
+                        <!--                <td class="fw-bold" style="text-align: right !important;">-->
+                        <!--                    <span style="background-color: #c7c7c7 !important; padding-left: 25px">Doc. No: FRM.PROC.02.01,REV.01</span>-->
+                        <!--                </td>-->
+                        <!--            </tr>-->
+                        <!--        </table>-->
+                        <!--    </div>-->
+                        <!--</div>-->
+                        
+                        <div class="row">
+                            <div class="col">
+                                <table class="table-borderless w-100">
+                                    <tr>
+                                        <th style="text-align:left; width: 120px">No</th>
+                                        <td style="width: 10px">:</td>
+                                        <td><span t-field="doc.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:left">Date</th>
+                                        <td>:</td>
+                                        <td><span t-field="doc.date_start" t-options="{&quot;widget&quot;: &quot;date&quot;,&quot;format&quot;: &quot;MMM-d-yyyy&quot;}"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col">
+                                <table class="table-borderless w-100">
+                                    <tr>
+                                        <th style="text-align:left; width: 120px">User</th>
+                                        <td style="width: 10px">:</td>
+                                        <td><span t-field="doc.requested_by"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:left; width: 120px">Delivery Address</th>
+                                        <td style="width: 10px">:</td>
+                                        <td>
+                                            <div t-field="doc.company_id.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;], &quot;no_marker&quot;: True}"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <table class="o_has_total_table table table-sm o_main_table table-bordered mt-3">
+                            <thead style="display: table-row-group">
+                                <tr>
+                                    <th name="th_no" class="text-center fw-bold" style="border-right: 1px solid #fff;">No.</th>
+                                    <!-- <th name="th_reference" class="text-center fw-bold" style="border-right: 1px solid #fff;">Reference</th> -->
+                                    <th name="th_product" class="text-center text-nowrap fw-bold" style="border-right: 1px solid #fff;">Product</th>
+                                    <th name="th_specifications" class="text-center text-nowrap fw-bold" style="border-right: 1px solid #fff">Specification</th>
+                                    <th name="th_qty" class="text-center text-nowrap fw-bold" style="border-right: 1px solid #fff">Qty</th>
+                                    <th name="th_uom" class="text-center text-nowrap fw-bold" style="border-right: 1px solid #fff;">UoM</th>
+                                    <th name="th_need_date" class="text-center text-nowrap fw-bold" style="border-right: 1px solid #fff;">Need by Date</th>
+                                    <th name="th_leadtime" class="text-center fw-bold">Lead Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="number" t-value="0"/>
+                                <tr t-foreach="doc.line_ids.sorted(key=lambda r: r.id)" t-as="line_id">
+                                    <t t-set="number" t-value="number + 1"/>
+                                    <td name="td_no" class="text-center">
+                                        <span t-esc="number"/>
+                                    </td>
+                                    <!-- <td name="td_reference" class="text-center">
+                                        <span t-field="line_id.product_id.default_code"/>
+                                    </td> -->
+                                    <td name="td_product" class="text-left">
+                                        <span t-field="line_id.product_id.name"/>
+                                    </td>
+                                    <td name="td_specifications" class="text-left">
+                                        <span t-field="line_id.specifications"/>
+                                    </td>
+                                    <td name="td_qty" class="text-center">
+                                        <span t-field="line_id.product_qty"/>
+                                    </td>
+                                    <td name="td_uom" class="text-center">
+                                        <span t-field="line_id.product_uom_id"/>
+                                    </td>
+                                    <td name="td_need_date" class="text-center">
+                                        <span t-field="line_id.date_required"/>
+                                    </td>
+                                    <td name="td_lead_time">
+                                        <span t-field="doc.lead_time_date"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="bot-sect">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p style="font-weight: bold">DESCRIPTION</p>
+                                    <span t-field="doc.description"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 signature">
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <td style="width: 150px; text-align: center; font-weight: bold">Prepared</td>
+                                            <td style="width: 150px; text-align: center; font-weight: bold">Checked</td>
+                                            <!-- <td style="width: 150px; text-align: center; font-weight: bold">Acknowledge 2</td> -->
+                                            <td style="width: 150px; text-align: center; font-weight: bold">Approved</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 70px"/>
+                                            <td style="height: 70px"/>
+                                            <!-- <td style="height: 70px"/> -->
+                                            <td style="height: 70px"/>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center">
+                                                <span t-field="doc.requested_by"/>
+                                            </td>
+                                            <td style="text-align: center">
+                                                <!-- <span t-field="doc.approver_2"/> -->
+                                            </td>
+                                            <!-- <td style="text-align: center">
+                                                <span t-field="doc.approver_3"/>
+                                            </td> -->
+                                            <td style="text-align: center">
+                                                <span t-field="doc.assigned_to"/>
+                                                <span t-if="doc.state in ('approved') and doc.final_approve_date">on <span t-field="doc.final_approve_date"/></span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div t-attf-class="footer">
+                    <img src="/ics_report_template/static/img/footer.png" style="position:absolute; left:0; width: 100%;"/>
+                    <p class="text-muted" style="font-size: 10pt">Page <span class="page"/> of <span class="topage"/> | <span t-field="doc.name"/></p>
+                </div>
+
+            </t>
+        </t>
+    </template>
+</odoo>

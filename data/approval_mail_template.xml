@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="approval_pr_mail_template" model="mail.template">
+            <field name="name">Approval Request</field>
+            <field name="model_id" ref="purchase_request.model_purchase_request"/>
+            <field name="subject">Request Approval Purchase Request: {{ ctx.get('status') }} Ref #{{ object.name }}</field>
+            <field name="description">Email template for approval request purchase request</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello,
+                        
+                        <br/><br/>
+                        Purchase request <span style="font-weight:bold;" t-out="object.name or ''">PR0015</span>
+                        from <t t-out="object.requested_by.name or ''">Brandon Freeman</t>
+                        with status <span style="font-weight:bold;" t-out="ctx.get('status') or ''">Draft</span>
+
+                        <br/><br/>
+                        Need <span style="font-weight:bold;">Approval</span>
+                        
+                        <br/><br/>
+
+                        <a t-attf-href="/odoo/purchase-requests/{{ object.id }}" target="_blank" class="btn btn-primary">View Request</a> 
+                    </p>
+                </div>
+            </field>
+            <field name="report_template_ids" eval="[(4, ref('ics_purchase_request.action_report_purchases_request'))]"/>
+        </record>
+    </data>
+</odoo>

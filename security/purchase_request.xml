@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="group_purchase_request_gm_om" model="res.groups">
+        <field name="name">Purchase Request GM / OM</field>
+        <field
+            name="implied_ids"
+            eval="[(4, ref('purchase_request.group_purchase_request_manager'))]"
+        />
+        <field name="category_id" ref="purchase_request.module_category_purchase_request" />
+    </record>
+    <record id="group_purchase_request_administrator" model="res.groups">
+        <field name="name">Purchase Request Administrator</field>
+        <field
+            name="implied_ids"
+            eval="[(4, ref('ics_purchase_request.group_purchase_request_gm_om'))]"
+        />
+        <field name="category_id" ref="purchase_request.module_category_purchase_request" />
+    </record>
+</odoo>

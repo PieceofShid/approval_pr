@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="ics_approval_pr_config_form_view" model="ir.ui.view">
+        <field name="name">ics.approval.pr.config.form.view</field>
+        <field name="model">ics.approval.pr.config</field>
+        <field name="arch" type="xml">
+            <form string="Approval Purchase Request Config" create="False" delete="False">
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1"/>
+                        <field name="company_id"
+                            groups="base.group_multi_company"
+                            widget="selection"
+                            readonly="True"
+                            class="oe_inline"/>
+                        <field name="active" widget="boolean_toggle"/>
+                        <field name="group_category" invisible="True"/>
+                    </group>
+                    <notebook>
+                        <page string="Approval Rule">
+                            <field name="rule_id" widget="section_and_note_one2many" mode="list">
+                                <list string="Approval Rule" editable="bottom">
+                                    <field name="name" readonly="1" force_save="1"/>
+                                    <field name="state"/>
+                                    <field name="action"/>
+                                    <field name="company_unit_id"
+                                    options="{'no_create': True}"/>
+                                    <field name="company_dept_id"
+                                    domain="[('company_unit_id', '=', company_unit_id)]"
+                                    options="{'no_create': True}"/>
+                                    <field name="group_id"
+                                    options="{'no_create': True}"
+                                    domain="[('category_id', '=', parent.group_category)]"
+                                    />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ics_approval_pr_config_action" model="ir.actions.act_window">
+        <field name="name">Approval Config</field>
+        <field name="path">approval-pr-configuration</field>
+        <field name="res_model">ics.approval.pr.config</field>
+        <field name="res_id" ref="ics_approval_pr_config_01"/>
+        <field name="view_mode">form</field>
+    </record>
+
+    <menuitem
+        id="menu_approval_pr_config"
+        name="Configuration"
+        parent="purchase_request.parent_menu_purchase_request"
+        groups="ics_purchase_request.group_purchase_request_administrator"
+    />
+
+    <menuitem
+        id="approval_pr_config"
+        sequence="10"
+        name="Approval Config"
+        parent="menu_approval_pr_config"
+        action="ics_approval_pr_config_action"/>
+</odoo>
