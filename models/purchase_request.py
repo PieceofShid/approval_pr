@@ -53,3 +53,33 @@ class PurchaseRequest(models.Model):
                            "assigned_to": self.env.uid,
                            "final_approve_date": today,
                            "lead_time_date": lead})
+    
+    def _get_approval_log(self):
+        logs = self.approval_log.search([
+            ('from_action', '!=', 'Draft'),
+            ('to_action', '!=', 'Complete'),
+            ('request_id', '=', self.id)])
+        approver = []
+
+        for log in logs:
+            logging = self.env['ics.approval.pr.log'].search([
+                ('to_action', '=', log.to_action),
+                ('request_id', '=', log.request_id.id)],
+                order='datetime DESC', limit=1)
+
+            approver.append({
+                'name': logging.approver_id.name,
+                'signature': logging.approver_id.signature_image
+            })
+
+        return approver
+    
+    def _get_approval_complete(self):
+        logs = self.approval_log.search([
+            ('to_action', '=', 'Complete'),
+            ('request_id', '=', self.id)], order='datetime DESC', limit=1)
+        
+        return {
+            'name': logs.approver_id.name,
+            'signature': logs.approver_id.signature_image
+        }

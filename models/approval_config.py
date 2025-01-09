@@ -27,15 +27,16 @@ class ApprovalRule(models.Model):
         ('pending_release', 'Pending Release'),
         ('waiting_release', 'Waiting Release'),
         ('waiting_complete', 'Waiting Complete'),
-        ('complete', 'Complete'),])
+        ('complete', 'Complete'),], help="Kondisi status record purchase request")
     action = fields.Selection(string='Action', required=True, selection=[
         ('pending_release', 'Pending Release'),
         ('waiting_release', 'Waiting Release'),
         ('waiting_complete', 'Waiting Complete'),
-        ('complete', 'Complete'),])
-    company_unit_id = fields.Many2one('ics.company.unit', string='Allocation Approval', required=True)
-    company_dept_id = fields.Many2one('ics.company.dept', string="Specific Allocation", required=True)
-    group_id = fields.Many2one('res.groups', string="Group Users")
+        ('complete', 'Complete'),], help="Action status selanjutnya pada record purchase request")
+    company_unit_id = fields.Many2one('ics.company.unit', string='Allocation Approval', required=True, help="Filter akses approval hanya untuk user yang terdaftar pada unit tertentu")
+    company_dept_id = fields.Many2one('ics.company.dept', string="Specific Allocation", required=True, help="Filter akses approval hanya untuk user yang terdaftar pada dept. tertentu")
+    group_id = fields.Many2one('res.groups', string="Group Users", help="Membatasi akses approval hanya bisa dilakukan oleh user dalam group yang dipilih, jika kondisi unit dan dept. sama")
+    multi_dept = fields.Boolean(string="Can Approve Other ?", default=False, help="Membuka akses dept. sehingga dapat melakukan approve dengan dept. yang berbeda dalam satu unit yang sama")
 
     @api.onchange('action')
     def _update_name(self):

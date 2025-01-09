@@ -20,7 +20,7 @@
                         <page string="Approval Rule">
                             <field name="rule_id" widget="section_and_note_one2many" mode="list">
                                 <list string="Approval Rule" editable="bottom">
-                                    <field name="name" readonly="1" force_save="1"/>
+                                    <field name="name" readonly="1" force_save="1" optional="hide"/>
                                     <field name="state"/>
                                     <field name="action"/>
                                     <field name="company_unit_id"
@@ -28,6 +28,7 @@
                                     <field name="company_dept_id"
                                     domain="[('company_unit_id', '=', company_unit_id)]"
                                     options="{'no_create': True}"/>
+                                    <field name="multi_dept" widget="boolean_toggle"/>
                                     <field name="group_id"
                                     options="{'no_create': True}"
                                     domain="[('category_id', '=', parent.group_category)]"
