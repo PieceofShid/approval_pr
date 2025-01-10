@@ -25,7 +25,6 @@ class IcsApprovalPRWizard(models.TransientModel):
             if self.env.user.has_group(xml_id) and self.env.user.company_unit_id.id == rule.company_unit_id.id:
                 if self.request.requested_by.company_dept_id.id == rule.company_dept_id.id and self.request.requested_by.company_dept_id.id == self.env.user.company_dept_id.id:
                     ids.append(rule.id)
-                    print(rule.company_dept_id.name)
                 elif rule.multi_dept:
                     ids.append(rule.id)
 

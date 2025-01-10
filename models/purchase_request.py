@@ -1,4 +1,5 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 from datetime import datetime, timedelta
 
 class PurchaseRequest(models.Model):
@@ -82,4 +83,53 @@ class PurchaseRequest(models.Model):
         return {
             'name': logs.approver_id.name,
             'signature': logs.approver_id.signature_image
+        }
+
+class PurchaseRequestLine(models.Model):
+    _inherit = 'purchase.request.line'
+
+    lead_time_date = fields.Date(string="Lead Time", compute="_get_parent_lead_time")
+
+    def _get_parent_lead_time(self):
+        request = self.request_id
+
+        self.lead_time_date = request.lead_time_date
+
+class PurchaseOrderLines(models.Model):
+    _inherit = 'purchase.order.line'
+
+    specifications = fields.Char(string="Specifications")
+
+class PurchaseRequestLineMakePurchaseOrder(models.TransientModel):
+    _inherit = "purchase.request.line.make.purchase.order"
+
+    @api.model
+    def _prepare_purchase_order_line(self, po, item):
+        if not item.product_id:
+            raise UserError(_("Please select a product for all lines"))
+        product = item.product_id
+
+        # Keep the standard product UOM for purchase order so we should
+        # convert the product quantity to this UOM
+        qty = item.product_uom_id._compute_quantity(
+            item.product_qty, product.uom_po_id or product.uom_id
+        )
+        # Suggest the supplier min qty as it's done in Odoo core
+        min_qty = item.line_id._get_supplier_min_qty(product, po.partner_id)
+        qty = max(qty, min_qty)
+        date_required = item.line_id.date_required
+        return {
+            "order_id": po.id,
+            "product_id": product.id,
+            "product_uom": product.uom_po_id.id or product.uom_id.id,
+            "price_unit": 0.0,
+            "product_qty": qty,
+            "specifications": item.line_id.specifications,
+            "analytic_distribution": item.line_id.analytic_distribution,
+            "purchase_request_lines": [(4, item.line_id.id)],
+            "lead_time": item.line_id.lead_time_date,
+            "date_planned": datetime(
+                date_required.year, date_required.month, date_required.day
+            ),
+            "move_dest_ids": [(4, x.id) for x in item.line_id.move_dest_ids],
         }

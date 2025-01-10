@@ -112,7 +112,6 @@
                             <thead style="display: table-row-group">
                                 <tr>
                                     <th name="th_no" class="text-center fw-bold" style="border-right: 1px solid #fff;">No.</th>
-                                    <!-- <th name="th_reference" class="text-center fw-bold" style="border-right: 1px solid #fff;">Reference</th> -->
                                     <th name="th_product" class="text-center text-nowrap fw-bold" style="border-right: 1px solid #fff;">Product</th>
                                     <th name="th_specifications" class="text-center text-nowrap fw-bold" style="border-right: 1px solid #fff">Specification</th>
                                     <th name="th_qty" class="text-center text-nowrap fw-bold" style="border-right: 1px solid #fff">Qty</th>
@@ -128,14 +127,16 @@
                                     <td name="td_no" class="text-center">
                                         <span t-esc="number"/>
                                     </td>
-                                    <!-- <td name="td_reference" class="text-center">
-                                        <span t-field="line_id.product_id.default_code"/>
-                                    </td> -->
                                     <td name="td_product" class="text-left">
                                         <span t-field="line_id.product_id.name"/>
                                     </td>
                                     <td name="td_specifications" class="text-left">
-                                        <span t-field="line_id.specifications"/>
+                                        <t t-if="line_id.specifications">
+                                            <span t-field="line_id.specifications"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span t-field="line_id.name"/>
+                                        </t>
                                     </td>
                                     <td name="td_qty" class="text-center">
                                         <span t-field="line_id.product_qty"/>
@@ -175,17 +176,17 @@
                                         </tr>
                                         <tr>
                                             <td t-if="doc.requested_by.signature_image" style="text-align: center">
-                                                <img t-att-src="image_data_uri(doc.requested_by.signature_image)" style="max-width: 200px;" alt="TTD"/>
+                                                <img t-att-src="image_data_uri(doc.requested_by.signature_image)" style="max-width: 200px; max-height: 100px;" alt="TTD"/>
                                             </td>
                                             <td t-else="" style="height: 70px"/>
                                             <t t-foreach="approve_logs" t-as="log">
                                                 <td t-if="log['signature']" style="text-align: center">
-                                                    <img t-att-src="image_data_uri(log['signature'])" style="max-width: 200px;" alt="TTD"/>
+                                                    <img t-att-src="image_data_uri(log['signature'])" style="max-width: 200px; max-height: 100px;" alt="TTD"/>
                                                 </td>
                                                 <td t-else="" style="height: 70px"/>
                                             </t>
                                             <td t-if="complete_logs['signature']" style="text-align: center">
-                                                <img t-att-src="image_data_uri(complete_logs['signature'])" style="max-width: 200px;" alt="TTD"/>
+                                                <img t-att-src="image_data_uri(complete_logs['signature'])" style="max-width: 200px; max-height: 100px;" alt="TTD"/>
                                             </td>
                                             <td t-else="" style="height: 70px"/>
                                         </tr>
@@ -200,7 +201,7 @@
                                             </t>
                                             <td style="text-align: center">
                                                 <span t-out="complete_logs['name']"/>
-                                                <span t-if="doc.state in ('approved') and doc.final_approve_date">on <span t-field="doc.final_approve_date"/></span>
+                                                <span t-if="doc.state in ('approved') and doc.final_approve_date">on <span t-field="doc.final_approve_date" t-options="{'widget': 'date','format': 'MMM-d-yyyy'}"/></span>
                                             </td>
                                         </tr>
                                     </table>
