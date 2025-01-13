@@ -12,7 +12,7 @@
                 <attribute name="invisible">is_approval_active or state not in ('to_approve')</attribute>
             </button>
             <button name="button_rejected" position="attributes">
-                <attribute name="invisible">is_approval_active or state not in ('to_approve', 'approved')</attribute>
+                <attribute name="invisible">is_show_rejected_button == False</attribute>
             </button>
             <button name="%(purchase_request.action_purchase_request_line_make_purchase_order)d" position="attributes">
                 <attribute name="groups">purchase.group_purchase_user</attribute>
