@@ -26,8 +26,6 @@ class PurchaseRequest(models.Model):
         for purchase in self:
             company_unit_request = purchase.requested_by.company_unit_id
             company_unit_users   = self.env.user.company_unit_id
-            check_user_groups    =  self.env.user.has_group("purchase_request.group_purchase_request_manager")
-            # if company_unit_request.id == company_unit_users.id and purchase.state not in ('pending_release', 'waiting_release', 'waiting_complete', 'approved'):
             if company_unit_request.id == company_unit_users.id and purchase.state in ('pending_release', 'waiting_release', 'waiting_complete'):
                 purchase.is_show_rejected_button = True
             else:
@@ -102,11 +100,17 @@ class PurchaseRequestLine(models.Model):
     _inherit = 'purchase.request.line'
 
     lead_time_date = fields.Date(string="Lead Time", compute="_get_parent_lead_time")
+    price_unit = fields.Monetary(string="Price Unit", default=0.0)
 
     def _get_parent_lead_time(self):
         request = self.request_id
 
         self.lead_time_date = request.lead_time_date
+
+    @api.onchange("price_unit", "product_qty")
+    def _get_estimated_cost(self):
+        for request in self:
+            request.estimated_cost = request.price_unit * request.product_qty
 
 class PurchaseOrderLines(models.Model):
     _inherit = 'purchase.order.line'
