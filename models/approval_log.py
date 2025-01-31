@@ -8,7 +8,7 @@ class PurchaseOrder(models.Model):
 class ApprovalLog(models.Model):
     _name = 'ics.approval.pr.log'
 
-    request_id  = fields.Many2one('purchase.request', string="Purchase Request", readonly=True, required=True)
+    request_id  = fields.Many2one('purchase.request', string="Purchase Request", readonly=True, required=True, ondelete="cascade")
     approver_id = fields.Many2one('res.users', string="Approver")
     from_action = fields.Char(string="From")
     to_action   = fields.Char(string="To")

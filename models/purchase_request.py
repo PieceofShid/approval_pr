@@ -6,14 +6,18 @@ class PurchaseRequest(models.Model):
     _inherit = 'purchase.request'
 
     company_unit_id = fields.Many2one('ics.company.unit', string="Company Unit")
-    final_approve_date = fields.Date(string='Date approve final', readonly=True)
-    checker_id = fields.Many2one('res.user', string="Checker")
-    lead_time_date = fields.Date(string='Date lead time', readonly=True)
+    final_approve_date = fields.Date(string='Date approve final', readonly=True, copy=False)
+    checker_id = fields.Many2one('res.user', string="Checker", copy=False)
+    lead_time_date = fields.Date(string='Date lead time', readonly=True, copy=False)
     state = fields.Selection(selection_add=[
         ('pending_release', 'Pending Release'),
         ('waiting_release', 'Waiting Release'),
         ('waiting_complete', 'Waiting Complete'),
         ("approved",), ], ondelete={'pending_release': 'set default', 'waiting_release': 'set default', 'waiting_complete': 'set default'})
+    budget_allocation = fields.Selection(selection=[
+        ('AVP', 'AVP'),
+        ('Teri', 'Teri')
+    ])
     
     def _get_approval_config_status(self):
         for purchase in self:
@@ -96,6 +100,14 @@ class PurchaseRequest(models.Model):
             'signature': logs.approver_id.signature_image
         }
 
+class PurchaseOrder(models.Model):
+    _inherit = 'purchase.order'
+    
+    budget_allocation = fields.Selection(selection=[
+        ('AVP', 'AVP'),
+        ('Teri', 'Teri')
+    ])
+
 class PurchaseRequestLine(models.Model):
     _inherit = 'purchase.request.line'
 
@@ -119,6 +131,29 @@ class PurchaseOrderLines(models.Model):
 
 class PurchaseRequestLineMakePurchaseOrder(models.TransientModel):
     _inherit = "purchase.request.line.make.purchase.order"
+
+    @api.model
+    def _prepare_purchase_order(self, picking_type, group_id, company, origin):
+        request_ids = self.env.context.get("active_ids", False)
+
+        request = self.env['purchase.request'].browse(request_ids)
+
+        if not self.supplier_id:
+            raise UserError(_("Enter a supplier."))
+        supplier = self.supplier_id
+        data = {
+            "origin": origin,
+            "partner_id": self.supplier_id.id,
+            "payment_term_id": self.supplier_id.property_supplier_payment_term_id.id,
+            "fiscal_position_id": supplier.property_account_position_id
+            and supplier.property_account_position_id.id
+            or False,
+            "picking_type_id": picking_type.id,
+            "company_id": company.id,
+            "group_id": group_id.id,
+            "budget_allocation": request.budget_allocation
+        }
+        return data
 
     @api.model
     def _prepare_purchase_order_line(self, po, item):

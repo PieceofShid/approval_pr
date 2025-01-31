@@ -66,9 +66,10 @@ class IcsApprovalPRWizard(models.TransientModel):
             'status': self.actions.name
         }
 
-        template = self.env.ref('ics_purchase_request.approval_pr_mail_template')
-        template.sudo().write({'email_to': recipient})
-        template.with_context(ctx).send_mail(self.request.id, force_send=True)
+        if len(recipient) > 0:
+            template = self.env.ref('ics_purchase_request.approval_pr_mail_template')
+            template.sudo().write({'email_to': recipient})
+            template.with_context(ctx).send_mail(self.request.id, force_send=True)
 
         self._write_approval_log()
 

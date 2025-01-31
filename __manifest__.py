@@ -16,7 +16,8 @@
         'security/ir.model.access.csv',
         'wizard/approval_wizard.xml',
         'views/purchase_request_view.xml',
-        'views/approval_config.xml'
+        'views/approval_config.xml',
+        'views/purchase_order_view.xml'
     ],
     'installable': True,
 }
