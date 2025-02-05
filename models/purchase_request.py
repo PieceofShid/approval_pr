@@ -45,6 +45,18 @@ class PurchaseRequest(models.Model):
                 'company_unit_id': request.requested_by.company_unit_id
             })
 
+    @api.onchange('company_unit_id')
+    def _get_budget_allocation(self):
+        for request in self:
+            if "AVP" in request.company_unit_id.name:
+                budget = "AVP"
+            else:
+                budget = "Teri"
+
+            request.write({
+                'budget_allocation': budget
+            })
+
     @api.depends("state")
     def _compute_is_editable(self):
         for rec in self:
