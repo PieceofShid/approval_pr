@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="purchase.purchase_order_form"/>
             <field name="arch" type="xml">
                 <field name="partner_id" position="after">
-                    <field name="budget_allocation" readonly="True"/>
+                    <field name="budget_allocation" readonly="False"/>
                 </field>
             </field>
         </record>
