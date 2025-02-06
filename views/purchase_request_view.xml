@@ -27,7 +27,7 @@
                 />
             </button>
             <field name="requested_by" position="after">
-                <field name="company_unit_id" readonly="is_editable == False"/>
+                <field name="company_unit_id" readonly="True"/>
                 <field name="budget_allocation"/>
             </field>
             <field name="requested_by" position="attributes">

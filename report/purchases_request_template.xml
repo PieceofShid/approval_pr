@@ -60,21 +60,6 @@
     
                         <p class="text-center fw-bold" style="font-size: 24pt; letter-spacing: 2; color: #000; font-family: 'Book Antiqua';">PURCHASE REQUEST</p>
                         
-                        <!--<div class="row">-->
-                        <!--    <div class="col">-->
-                                
-                        <!--    </div>-->
-                        <!--    <div class="col">-->
-                        <!--        <table class="table-borderless w-100">-->
-                        <!--            <tr>-->
-                        <!--                <td class="fw-bold" style="text-align: right !important;">-->
-                        <!--                    <span style="background-color: #c7c7c7 !important; padding-left: 25px">Doc. No: FRM.PROC.02.01,REV.01</span>-->
-                        <!--                </td>-->
-                        <!--            </tr>-->
-                        <!--        </table>-->
-                        <!--    </div>-->
-                        <!--</div>-->
-                        
                         <div class="row">
                             <div class="col">
                                 <table class="table-borderless w-100">
@@ -87,6 +72,11 @@
                                         <th style="text-align:left">Date</th>
                                         <td>:</td>
                                         <td><span t-field="doc.date_start" t-options="{&quot;widget&quot;: &quot;date&quot;,&quot;format&quot;: &quot;MMM-d-yyyy&quot;}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:left; width: 120px">Budget Allocation</th>
+                                        <td style="width: 10px">:</td>
+                                        <td><span t-field="doc.budget_allocation"/></td>
                                     </tr>
                                 </table>
                             </div>
