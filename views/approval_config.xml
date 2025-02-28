@@ -5,6 +5,9 @@
         <field name="model">ics.approval.pr.config</field>
         <field name="arch" type="xml">
             <form string="Approval Purchase Request Config" create="False" delete="False">
+                <header>
+                    <button type="object" string="Sinkron" name="fill_object"/>
+                </header>
                 <sheet>
                     <group>
                         <field name="name" readonly="1"/>
@@ -23,11 +26,12 @@
                                     <field name="name" readonly="1" force_save="1" optional="hide"/>
                                     <field name="state"/>
                                     <field name="action"/>
-                                    <field name="company_unit_id"
+                                    <field name="company_unit_ids" widget="many2many_tags"
                                     options="{'no_create': True}"/>
-                                    <field name="company_dept_id"
-                                    domain="[('company_unit_id', '=', company_unit_id)]"
-                                    options="{'no_create': True}"/>
+                                    <field name="company_dept_ids" widget="many2many_tags"
+                                    domain="[('company_unit_id', 'in', company_unit_ids)]"
+                                    options="{'no_create': True}"
+                                    />
                                     <field name="multi_dept" widget="boolean_toggle"/>
                                     <field name="group_id"
                                     options="{'no_create': True}"

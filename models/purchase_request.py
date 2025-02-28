@@ -26,16 +26,16 @@ class PurchaseRequest(models.Model):
     
     is_approval_active = fields.Boolean(string="Is Approval Active", compute=_get_approval_config_status)
 
-    def _show_rejected_button(self):
+    def _show_reset_button(self):
         for purchase in self:
             company_unit_request = purchase.requested_by.company_unit_id
             company_unit_users   = self.env.user.company_unit_id
-            if company_unit_request.id == company_unit_users.id and purchase.state in ('pending_release', 'waiting_release', 'waiting_complete'):
-                purchase.is_show_rejected_button = True
+            if company_unit_request.id == company_unit_users.id and purchase.state in ('pending_release', 'waiting_release', 'waiting_complete', 'rejected'):
+                purchase.is_show_reset_button = True
             else:
-                purchase.is_show_rejected_button = False
+                purchase.is_show_reset_button = False
                 
-    is_show_rejected_button = fields.Boolean(string="Show Reject Buttom", compute=_show_rejected_button)
+    is_show_reset_button = fields.Boolean(string="Show Reset Buttom", compute=_show_reset_button)
 
     @api.onchange('requested_by')
     def _get_default_company_uni(self):
