@@ -48,10 +48,13 @@ class PurchaseRequest(models.Model):
     @api.onchange('company_unit_id')
     def _get_budget_allocation(self):
         for request in self:
-            if "AVP" in request.company_unit_id.name:
-                budget = "AVP"
+            if request.company_unit_id:
+                if "AVP" in request.company_unit_id.name:
+                    budget = "AVP"
+                else:
+                    budget = "Teri"
             else:
-                budget = "Teri"
+                budget = False
 
             request.write({
                 'budget_allocation': budget
