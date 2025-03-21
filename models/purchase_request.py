@@ -7,7 +7,7 @@ class PurchaseRequest(models.Model):
 
     company_unit_id = fields.Many2one('ics.company.unit', string="Company Unit")
     final_approve_date = fields.Date(string='Date approve final', readonly=True, copy=False)
-    checker_id = fields.Many2one('res.user', string="Checker", copy=False)
+    checker_id = fields.Many2one('res.users', string="Checker", copy=False)
     lead_time_date = fields.Date(string='Date lead time', readonly=True, copy=False)
     state = fields.Selection(selection_add=[
         ('pending_release', 'Pending Release'),
