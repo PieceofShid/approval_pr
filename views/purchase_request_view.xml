@@ -81,6 +81,9 @@
             <field name="state" position="attributes">
                 <attribute name="decoration-warning">state in ('to_approve', 'pending_release', 'waiting_release', 'waiting_complete')</attribute>
             </field>
+            <field name="date_start" position="after">
+                <field name="description"/>
+            </field>
         </field>
     </record>
 
